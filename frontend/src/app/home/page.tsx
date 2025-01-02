@@ -29,10 +29,7 @@ const page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/posts",
-        formData
-      );
+      const response = await axios.post("http://localhost:5000/data", formData);
       console.log("Response from server:", response.data);
     } catch (error) {
       console.error("Error sending data to the server:", error);
