@@ -2,7 +2,9 @@ import cassandra from 'cassandra-driver';
 import express from "express";
 import {PORT} from "./config.js";
 import cors from "cors";
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 
 app.listen(PORT, () => {
@@ -25,6 +27,14 @@ async function run() {
 app.get("/", (req, res) => {
     console.log("connecting to Astra");
     run().catch(console.error);
+    return res.status(200).send("Connected to Astra");
 });
+
+app.post("/data", (req, res) => {
+    const {pType, likes, shares, comments} = req.body;
+    console.log(req.body); 
+    console.log(pType, likes, shares, comments);
+    return res.status(200).send("Data received");
+})
 
 // run().catch(console.error);
