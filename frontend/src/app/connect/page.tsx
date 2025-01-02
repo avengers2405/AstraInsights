@@ -6,7 +6,7 @@ async function connect() {
   try {
     console.log('Connecting to AstraDB...');
     const res = await axios.get('http://localhost:5000/');
-    console.log('Connected to AstraDB', res.data);
+    console.log('Connected to AstraDB');
   } catch (error) {
     console.error('Error connecting to AstraDB', error);
   }
