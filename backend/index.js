@@ -48,17 +48,17 @@ app.get("/", (req, res) => {
 });
 
 app.post("/data", async (req, res) => {
-  const { pType, likes, shares, comments } = req.body;
+  const { postType, like, share, comments } = req.body;
   console.log(req.body);
 
   try {
     // Insert data into Astra DB
-    const success = await insertEngagementData(pType, likes, shares, comments);
+    const success = await insertEngagementData(postType, like, share, comments);
 
     if (success) {
       return res.status(201).json({
         message: "Data successfully stored in Astra DB",
-        data: { pType, likes, shares, comments },
+        data: { postType, like, share, comments },
       });
     } else {
       return res.status(500).json({
