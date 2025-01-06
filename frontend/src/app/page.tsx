@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Database,
   Share2,
@@ -8,7 +10,6 @@ import {
   Image,
   Layout,
   Upload,
-  X,
   FileIcon,
   CheckCircle,
   AlertCircle,
@@ -52,13 +53,14 @@ interface EngagementData {
 }
 
 const LandingPage = () => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string>("");
   const [uploadStatus, setUploadStatus] = useState<
-    "idle" | "success" | "error"
+    "idle" | "uploading" | "success" | "error"
   >("idle");
 
   // Sample engagement data
@@ -100,68 +102,6 @@ const LandingPage = () => {
     },
   ];
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const validateFile = (file: File): boolean => {
-    const validTypes = ["text/csv", "application/json"];
-    if (!validTypes.includes(file.type)) {
-      setError("Please upload a CSV or JSON file");
-      return false;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      // 5MB limit
-      setError("File size should be less than 5MB");
-      return false;
-    }
-    return true;
-  };
-
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    setError("");
-
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && validateFile(droppedFile)) {
-      setFile(droppedFile);
-      setUploadStatus("success");
-      setTimeout(() => {
-        setIsUploadDialogOpen(false);
-        setFile(null);
-        setUploadStatus("idle");
-      }, 1000);
-    }
-  }, []);
-
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile && validateFile(selectedFile)) {
-      setFile(selectedFile);
-      setUploadStatus("success");
-      setTimeout(() => {
-        setIsUploadDialogOpen(false);
-        setFile(null);
-        setUploadStatus("idle");
-      }, 1000);
-    }
-  };
-
   const engagementMetrics: EngagementMetric[] = [
     {
       icon: Layout,
@@ -194,6 +134,80 @@ const LandingPage = () => {
         "Workflow creation and GPT integration for advanced insights",
     },
   ];
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const validateFile = (file: File): boolean => {
+    const validTypes = ["text/csv", "application/json"];
+    if (!validTypes.includes(file.type)) {
+      setError("Please upload a CSV or JSON file");
+      return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File size should be less than 5MB");
+      return false;
+    }
+    return true;
+  };
+
+  const uploadFile = async (file: File) => {
+    setUploadStatus("uploading");
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+
+      const data = await response.json();
+      setUploadStatus("success");
+      localStorage.setItem("currentCollection", data.collection);
+      router.push("/chat");
+    } catch (error) {
+      setUploadStatus("error");
+      setError("Failed to upload file");
+    }
+  };
+
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    setError("");
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile && validateFile(droppedFile)) {
+      setFile(droppedFile);
+      uploadFile(droppedFile);
+    }
+  }, []);
+
+  const handleFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile && validateFile(selectedFile)) {
+      setFile(selectedFile);
+      await uploadFile(selectedFile);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white">
