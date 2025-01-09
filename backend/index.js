@@ -553,3 +553,5 @@ app.listen(PORT, () => {
   // Connect to Astra DB when server starts
   run().catch(console.error);
 });
+
+module.exports = app
