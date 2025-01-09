@@ -549,7 +549,11 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 
 // Initialize server
 app.listen(PORT, () => {
-  console.log(`Server running at social-pulse-9gmk-g8vqxzzpv-rushabhbhalgats-projects.vercel.app`);
+
+  console.log(`Server running at vercel:)`);
+
   // Connect to Astra DB when server starts
   run().catch(console.error);
 });
+
+module.exports = app

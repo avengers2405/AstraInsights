@@ -158,7 +158,9 @@ const LandingPage = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("social-pulse-9gmk-g8vqxzzpv-rushabhbhalgats-projects.vercel.app/upload", {
+
+      const response = await fetch("https://social-pulse-9gmk.vercel.app/upload", {
+
         method: "POST",
         body: formData,
       });
