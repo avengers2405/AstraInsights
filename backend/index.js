@@ -21,7 +21,7 @@ app.use(cors());
 const cloud = { secureConnectBundle: "./secure-connect-engagement-db.zip" };
 const authProvider = new cassandra.auth.PlainTextAuthProvider(
   "token",
-  "AstraCS:CfxfAtsYKHmZPvYopBhsZUjI:99725dc52c5de3ba4fc4be72d62bae6ceaea2cdab3f5f4241e0772510e3411e6"
+  process.env.LANGFLOW_APPLICATION_TOKEN
 );
 const client = new cassandra.Client({
   cloud,
@@ -157,8 +157,8 @@ class LangflowClient {
 }
 
 async function main(inputValue, inputType = 'chat', outputType = 'chat', stream = false) {
-  const flowIdOrName = '9fefd2d3-f63f-417c-9f35-abd6a3e3cc8a';
-  const langflowId = 'be4cf784-d2ed-4003-b857-523a7dc3b1e4';
+  const flowIdOrName = process.env.LANGFLOW_FLOW_ID;
+  const langflowId = process.env.LANGFLOW_ID;
   const applicationToken = process.env.LANGFLOW_APPLICATION_TOKEN;
   const langflowClient = new LangflowClient('https://api.langflow.astra.datastax.com',
       applicationToken);
@@ -222,7 +222,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "search_score_threshold": 0,
   "search_type": "Similarity",
   "setup_mode": "Sync",
-  "token": "ASTRA_DB_APPLICATION_TOKEN"
+  "token": process.env.ASTRA_DB_APPLICATION_TOKEN
 },
 "File-BmKZd": {
   "concurrency_multithreading": 4,
@@ -262,7 +262,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "search_score_threshold": 0,
   "search_type": "Similarity",
   "setup_mode": "Sync",
-  "token": "ASTRA_DB_APPLICATION_TOKEN"
+  "token": process.env.ASTRA_DB_APPLICATION_TOKEN
 },
 "OpenAIEmbeddings-2olgA": {
   "chunk_size": 1000,

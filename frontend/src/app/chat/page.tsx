@@ -5,6 +5,9 @@ import { Menu, Plus, Search, Edit, ChevronDown, Image, Camera, MessageCircle, Li
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+// import dotenv from "dotenv";
+
+// dotenv.config({path: '../../.env'});
 
 interface Message {
     text: string;
@@ -67,7 +70,8 @@ const ChatInterface = () => {
   };
 
   const handleQuery = async () => {
-    const response = await axios.post('http://localhost:5000/query', {inputValue: inputText});
+    console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/query`);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/query`, {inputValue: inputText});
     setMessages([...messages, { text: response.data, sender: 'bot' }]);
     setInputText(''); // Clear input field
     // setOutputValue(response.data);

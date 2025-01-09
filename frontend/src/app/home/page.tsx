@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+// import dotenv from "dotenv";
+
+// dotenv.config();
 
 interface FormData {
   postType: string;
@@ -29,7 +32,7 @@ const page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/data", formData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data`, formData);
       console.log("Response from server:", response.data);
     } catch (error) {
       console.error("Error sending data to the server:", error);
