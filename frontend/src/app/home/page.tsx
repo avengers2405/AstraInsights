@@ -29,7 +29,7 @@ const page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/data", formData);
+      const response = await axios.post("social-pulse-9gmk-g8vqxzzpv-rushabhbhalgats-projects.vercel.app/data", formData);
       console.log("Response from server:", response.data);
     } catch (error) {
       console.error("Error sending data to the server:", error);

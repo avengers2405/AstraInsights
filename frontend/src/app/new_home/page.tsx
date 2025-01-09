@@ -10,7 +10,7 @@ const App = () => {
     
     const handleKeyPress = async (event:any) => {
     if (event.key === 'Enter') {
-        const response = await axios.post('http://localhost:5000/query', {inputValue: inputValue});
+        const response = await axios.post('social-pulse-9gmk-g8vqxzzpv-rushabhbhalgats-projects.vercel.app/query', {inputValue: inputValue});
         console.log("response: ", response);
         setOutputValue(response.data);
         setInputValue(''); // Clear input field
