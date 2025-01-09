@@ -547,9 +547,11 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 });
 
-// Initialize server
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
-  // Connect to Astra DB when server starts
-  run().catch(console.error);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+
+module.exports = app
