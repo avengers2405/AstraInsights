@@ -159,7 +159,7 @@ const LandingPage = () => {
 
     try {
 
-      const response = await fetch("https://social-pulse-9gmk.vercel.app/upload", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`, {
 
         method: "POST",
         body: formData,
@@ -239,7 +239,7 @@ const LandingPage = () => {
               <Upload size={20} />
               Upload Your Dataset
             </button>
-            <button className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-full transition-colors">
+            <button onClick={() => router.push("/chat")} className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-full transition-colors">
               Use Sample Dataset
             </button>
           </div>
