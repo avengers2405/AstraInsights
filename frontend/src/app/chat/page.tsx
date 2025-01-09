@@ -67,7 +67,7 @@ const ChatInterface = () => {
   };
 
   const handleQuery = async () => {
-    const response = await axios.post('http://localhost:5000/query', {inputValue: inputText});
+    const response = await axios.post('social-pulse-9gmk-g8vqxzzpv-rushabhbhalgats-projects.vercel.app/query', {inputValue: inputText});
     setMessages([...messages, { text: response.data, sender: 'bot' }]);
     setInputText(''); // Clear input field
     // setOutputValue(response.data);
