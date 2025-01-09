@@ -222,7 +222,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "search_score_threshold": 0,
   "search_type": "Similarity",
   "setup_mode": "Sync",
-  "token": process.env.ASTRA_DB_APPLICATION_TOKEN
+  "token": "ASTRA_DB_APPLICATION_TOKEN"
 },
 "File-BmKZd": {
   "concurrency_multithreading": 4,
@@ -262,7 +262,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "search_score_threshold": 0,
   "search_type": "Similarity",
   "setup_mode": "Sync",
-  "token": process.env.ASTRA_DB_APPLICATION_TOKEN
+  "token": "ASTRA_DB_APPLICATION_TOKEN"
 },
 "OpenAIEmbeddings-2olgA": {
   "chunk_size": 1000,
@@ -547,11 +547,9 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 });
 });
 
-if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-}
-
-
-module.exports = app
+// Initialize server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}/`);
+    // Connect to Astra DB when server starts
+    run().catch(console.error);
+});
