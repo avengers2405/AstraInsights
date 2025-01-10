@@ -160,7 +160,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Here are some screenshots of the application:
 
-### Dashboard
+### AstraInsights
 
 ![Project Thumbnail](https://github.com/avengers2405/SocialPulse/blob/master/images/Project%20Thumbnail.png)
 
