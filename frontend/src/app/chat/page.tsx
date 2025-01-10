@@ -91,8 +91,8 @@ const ChatInterface = () => {
         <div className="p-2 flex-shrink-0">
           {/* Fixed Header */}
           <Button variant="outline" className="w-full justify-between mb-4 text-gray-600 rounded-xl">
-            <span>ChatGPT</span>
-            <ChevronDown size={16} />
+            <span>Langflow And AstraDB</span>
+            {/* <ChevronDown size={16} /> */}
           </Button>
 
           <Button 
