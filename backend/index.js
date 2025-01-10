@@ -55,6 +55,10 @@ async function run() {
 //   }
 // }
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 app.get("/", (req, res) => {
   console.log("connecting to Astra");
   run().catch(console.error);
