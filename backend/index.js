@@ -7,10 +7,15 @@ import multer from "multer";
 import Papa from "papaparse";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { DataAPIClient, Collection } from '@datastax/astra-db-ts';
+// import pkg from "@datastax/astra-db-ts";
+// const { DataAPIClient, createClient } = pkg;
 // import { fileTypeFromBuffer } from "file-type";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+var collectionName = "engagement_data_collection";
+var dimension_embedding = 1536;
 
 dotenv.config();
 const app = express();
@@ -35,19 +40,19 @@ async function run() {
 }
 
 // Create a function to insert data
-async function insertEngagementData(pType, likes, shares, comments) {
-  const query =
-    "INSERT INTO engagement_metrics (id, post_type, likes, shares, comments, created_at) VALUES (uuid(), ?, ?, ?, ?, toTimestamp(now()))";
-  const params = [pType, likes, shares, comments];
+// async function insertEngagementData(pType, likes, shares, comments) {
+//   const query =
+//     "INSERT INTO engagement_metrics (id, post_type, likes, shares, comments, created_at) VALUES (uuid(), ?, ?, ?, ?, toTimestamp(now()))";
+//   const params = [pType, likes, shares, comments];
 
-  try {
-    await client.execute(query, params, { prepare: true });
-    return true;
-  } catch (err) {
-    console.error("Error inserting data:", err);
-    return false;
-  }
-}
+//   try {
+//     await client.execute(query, params, { prepare: true });
+//     return true;
+//   } catch (err) {
+//     console.error("Error inserting data:", err);
+//     return false;
+//   }
+// }
 
 app.get("/", (req, res) => {
   console.log("connecting to Astra");
@@ -55,32 +60,32 @@ app.get("/", (req, res) => {
   return res.status(200).send("Connected to Astra");
 });
 
-app.post("/data", async (req, res) => {
-  const { postType, like, share, comments } = req.body;
-  console.log(req.body);
+// app.post("/data", async (req, res) => {
+//   const { postType, like, share, comments } = req.body;
+//   console.log(req.body);
 
-  try {
-    // Insert data into Astra DB
-    const success = await insertEngagementData(postType, like, share, comments);
+//   try {
+//     // Insert data into Astra DB
+//     const success = await insertEngagementData(postType, like, share, comments);
 
-    if (success) {
-      return res.status(201).json({
-        message: "Data successfully stored in Astra DB",
-        data: { postType, like, share, comments },
-      });
-    } else {
-      return res.status(500).json({
-        message: "Failed to store data in Astra DB",
-      });
-    }
-  } catch (error) {
-    console.error("Error in /data endpoint:", error);
-    return res.status(500).json({
-      message: "Server error while processing data",
-      error: error.message,
-    });
-  }
-});
+//     if (success) {
+//       return res.status(201).json({
+//         message: "Data successfully stored in Astra DB",
+//         data: { postType, like, share, comments },
+//       });
+//     } else {
+//       return res.status(500).json({
+//         message: "Failed to store data in Astra DB",
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error in /data endpoint:", error);
+//     return res.status(500).json({
+//       message: "Server error while processing data",
+//       error: error.message,
+//     });
+//   }
+// });
 
 // Note: Replace **<YOUR_APPLICATION_TOKEN>** with your actual Application token
 
@@ -203,13 +208,13 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
 },
 "AstraDB-esRXh": {
   "advanced_search_filter": "{}",
-  "api_endpoint": "https://fd18c845-3112-4a89-9f0b-cc74e5a915bf-us-east-2.apps.astra.datastax.com",
+  "api_endpoint": process.env.ASTRA_DB_ENDPOINT,
   "batch_size": null,
   "bulk_delete_concurrency": null,
   "bulk_insert_batch_concurrency": null,
   "bulk_insert_overwrite_concurrency": null,
   "collection_indexing_policy": "",
-  "collection_name": "engagement_data_collection",
+  "collection_name": collectionName,
   "embedding_choice": "Embedding Model",
   "keyspace": "",
   "metadata_indexing_exclude": "",
@@ -243,13 +248,13 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
 },
 "AstraDB-TSbed": {
   "advanced_search_filter": "{}",
-  "api_endpoint": "https://fd18c845-3112-4a89-9f0b-cc74e5a915bf-us-east-2.apps.astra.datastax.com",
+  "api_endpoint": process.env.ASTRA_DB_ENDPOINT,
   "batch_size": null,
   "bulk_delete_concurrency": null,
   "bulk_insert_batch_concurrency": null,
   "bulk_insert_overwrite_concurrency": null,
   "collection_indexing_policy": "",
-  "collection_name": "engagement_data_collection",
+  "collection_name": collectionName,
   "embedding_choice": "Embedding Model",
   "keyspace": "",
   "metadata_indexing_exclude": "",
@@ -271,7 +276,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "default_query": {},
   "deployment": "",
   "dimensions": null,
-  "embedding_ctx_length": 1536,
+  "embedding_ctx_length": dimension_embedding,
   "max_retries": 3,
   "model": "text-embedding-3-small",
   "model_kwargs": {},
@@ -294,7 +299,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "default_query": {},
   "deployment": "",
   "dimensions": null,
-  "embedding_ctx_length": 1536,
+  "embedding_ctx_length": dimension_embedding,
   "max_retries": 3,
   "model": "text-embedding-3-small",
   "model_kwargs": {},
@@ -311,6 +316,7 @@ async function main(inputValue, inputType = 'chat', outputType = 'chat', stream 
   "tiktoken_model_name": ""
 }
 };
+console.log('using collection: ', collectionName, ' and dimension: ', dimension_embedding);
     var response = await langflowClient.runFlow(
         flowIdOrName,
         langflowId,
@@ -352,167 +358,20 @@ app.post("/query", async (req, res) => {
   return res.status(200).send(response);
 });
 
-class LangflowProcessor {
-  constructor() {
-      // Initialize with your configuration
-      this.langflowUrl = process.env.LANGFLOW_INSTANCE_URL;
-      this.astraToken = process.env.ASTRA_DB_APPLICATION_TOKEN;
-      
-      // Store the flow configuration matching your Langflow setup
-      this.flowConfig = {
-        splitText: {
-          name: "SplitText-gGMOy",
-          settings: {
-              chunk_overlap: 15,
-              chunk_size: 50,
-              separator: "\n"
-          }
-        },
-        astraDB: {
-          name: "AstraDB",
-          settings: {
-              database: "engagement_db",
-              collection: "engagement_data_collection",
-              token: this.astraToken
-          }
-      },
-        openai_embeddings: {
-          name: "OpenAIEmbeddings-2olgA",
-          settings: {
-              model: "text-embedding-3-small",
-              // This is the component connected after Split Text
-              purpose: "data_ingestion"
-          }
-        }
-      };
-  }
-
-  async processFile(fileData) {
-    try {
-        // Step 1: Upload file to Langflow
-        // const fileData = await this.uploadFile(filePath);
-
-        // Step 2: Process the file through the text splitter
-        // console.log(fileData);
-        const chunks = await this.splitText(fileData);
-        console.log(chunks);
-
-        // Step 3: Generate embeddings and store in AstraDB
-        await this.storeInAstraDB(chunks);
-
-        console.log('Successfully processed file and stored in AstraDB');
-    } catch (error) {
-        console.error('Error in processing:', error);
-        throw error;
-    }
-  }
-
-  async splitText(fileData) {
-    // Process through the text splitter component
-    try {
-        const response = await axios.post(
-            `${this.langflowUrl}/api/v1/process`,
-            {
-                component: this.flowConfig.splitText.name,
-                configs: {
-                    chunk_overlap: this.flowConfig.splitText.chunk_overlap,
-                    chunk_size: this.flowConfig.splitText.chunk_size,
-                    separator: this.flowConfig.splitText.separator
-                },
-                input: fileData.text
-            }
-        );
-        return response.data.chunks;
-    } catch (error) {
-        console.error('Error splitting text:', error);
-        throw error;
-    }
-  }
-
-  async storeInAstraDB(chunks) {
-    // Process chunks through OpenAI embeddings and store in AstraDB
-    try {
-        // First generate embeddings
-        const embeddingsResponse = await axios.post(
-            `${this.langflowUrl}/api/v1/process`,
-            {
-                component: this.flowConfig.openai_embeddings.name,
-                configs: {
-                    model: this.flowConfig.openai_embeddings.model
-                },
-                input: chunks
-            }
-        );
-
-        // Then store in AstraDB
-        const astraResponse = await axios.post(
-            `${this.langflowUrl}/api/v1/process`,
-            {
-                component: "AstraDB",
-                configs: {
-                    database: this.flowConfig.astra_db.database,
-                    collection: this.flowConfig.astra_db.collection,
-                    token: this.flowConfig.astra_db.token
-                },
-                input: {
-                    data: chunks,
-                    embeddings: embeddingsResponse.data.embeddings
-                }
-            }
-        );
-        return astraResponse.data;
-    } catch (error) {
-        console.error('Error storing in AstraDB:', error);
-        throw error;
-    }
-  }
-}
-
-async function uploadFile(file, id) {
-  // Create a new Axios instance
-  const api = axios.create({
-    baseURL: "",
-  });
-  const formData = new FormData();
-  formData.append("file", file);
-  console.log('langflow url: ', process.env.LANGFLOW_URL);
-  return await api.post(`${process.env.LANGFLOW_URL}/api/v1/files/upload/${id}`, formData);
-}
-
-
-async function langflow_upload(file) {
-  // const fileInput = document.getElementById('fileInput');
-  if (file.length > 0) {
-    // const file = fileInput.files[0];
-    const flowId = process.env.LANGFLOW_FLOW_ID; // Replace this with the actual flow ID
-    try {
-      const response = await uploadFile(file, flowId);
-      console.log('File uploaded successfully', response);
-      return response;
-      // Here you can handle the response, e.g., saving the file path returned by the API
-    } catch (error) {
-      console.error('Error uploading file:', error.response.data);
-    }
-  } else {
-    console.log('No file selected');
-  }
-}
-
 // Add this new endpoint for file upload
 app.post("/upload", upload.single("file"), async (req, res) => {
+  // Initialize the client and get a 'Db' object
+  const client = new DataAPIClient(process.env.ASTRA_DB_APPLICATION_TOKEN);
+  const db = client.db(process.env.ASTRA_DB_ENDPOINT);
+
+  console.log(`* Connected to DB ${db.id}`);
+
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
 
-  console.log('reached here');
-
-  langflow_upload("this, is, my, file. suck my dick, guys.").then(function (result){
-    console.log('reached end of file upload stuff: ', result);
-
-  // console.log("aaaaaaaaaaaaaaaaaaaaahhh: ", );
-
   const fileContent = req.file.buffer.toString("utf8");
-  const collectionName = `social_data_${uuidv4().split("-")[0]}`;
+  const collection_name = `social_data_${uuidv4().split("-")[0]}`;
 
   try {
     // Parse CSV
@@ -522,20 +381,74 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       skipEmptyLines: true,
     });
 
-    var results = [];
+    const documents = [];
     for (var i = 0; i < temp_results.data.length; i++) {
       var obj = temp_results.data[i];
       // console.log('obj:', obj);
       if (obj.PostType!=null && obj.Likes!=null && obj.Shares!=null && obj.Comments!=null) {
-        results.push(obj);
+        documents.push({
+          PostType: obj.PostType,
+          Likes: obj.Likes,
+          Shares: obj.Shares,
+          Comments: obj.Comments,
+          $vectorize: `${obj.PostType},${obj.Likes},${obj.Shares},${obj.Comments}`,
+        });
       }
     }
 
-    // console.log('final results:', results);
+    console.log('Now going for insertion. document prepared: ', documents);
 
-    var processor = new LangflowProcessor();
-    processor.processFile(results);
+    (async function () {
+      const coll = await db.createCollection(collection_name, {
+        keyspace: "default_keyspace",
+        defaultId: {
+          type: "objectId",
+        },
+        checkExists: false,
+        vector: {
+          dimension: 1024,
+          metric: "cosine",
+          service: {
+            provider: 'nvidia',
+            modelName: 'NV-Embed-QA',
+          },
     
+        },
+      });
+
+      // const admin1 = client.admin(); // admin roles, can be used
+
+      try {
+        const inserted = await coll.insertMany(documents);
+        console.log(`* Inserted ${inserted.insertedCount} items.`);
+        collectionName = collection_name;
+        dimension_embedding = 1024;
+      } catch (e) {
+        console.log("* Documents found on DB already. Let\'s move on!\n Or maybe there's some error FFs");
+      }
+
+      console.log(await admin1.listDatabases());
+    })();
+
+    // const astra_client = new Collection({
+    //   applicationToken: process.env.ASTRA_DB_APPLICATION_TOKEN,
+    //   endpoint: process.env.ASTRA_DB_ENDPOINT,
+    //   keyspace: 'default_keyspace',
+    // });
+
+    // const astra_collection = await astra_client.collection(collection_name);
+
+    // await astra_collection.updateSearchConfig({
+    //   vector: {
+    //     enabled: true,
+    //     dimension: 1536,  // Must match your embedding dimension
+    //     metric: "cosine"      // or "euclidean" or "dot_product" based on your needs
+    //   }
+    // });
+    // console.log(`Vector search enabled for collection: ${collection_name}`);
+    // const config = await astra_collection.getSearchConfig();
+    // console.log("Search config:", config);
+
     res.status(200).json({
       message: "Data uploaded successfully",
       collection: collectionName,
@@ -544,7 +457,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     console.error("Upload error:", error);
     res.status(500).json({ error: error.message });
   }
-});
 });
 
 // Initialize server
