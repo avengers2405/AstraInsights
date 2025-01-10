@@ -346,7 +346,7 @@ app.post("/query", async (req, res) => {
   // console.log("question:  ", inputValue);
 
   const args = [inputValue];
-  const response = await main(
+  var response = await main(
     args[0], // inputValue
     args[1], // inputType
     args[2], // outputType
@@ -355,6 +355,17 @@ app.post("/query", async (req, res) => {
 
   console.log("args: ", args);
   console.log("response:  ", response);
+  if (response==undefined){
+    collectionName = 'engagement_data_collection';
+    dimension_embedding = 1536;
+    console.log('using backup data');
+    response = await main(
+      args[0], // inputValue
+      args[1], // inputType
+      args[2], // outputType
+      args[3] === "true" // stream
+    );
+  }
   return res.status(200).send(response);
 });
 
