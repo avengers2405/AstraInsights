@@ -1,6 +1,6 @@
 # AstraInsights
 
-SocialPulse is a web application designed to analyze and visualize social media engagement data. The project is built using a Next.js frontend, Node.js backend, Langflow and Datastax Astra DB.
+AstraInsights is a web application designed to analyze and visualize social media engagement data. The project is built using a Next.js frontend, Node.js backend, Langflow and Datastax Astra DB.
 
 ## Table of Contents
 
