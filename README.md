@@ -25,8 +25,8 @@ Make sure you have the following installed on your machine:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/socialpulse.git
-cd socialpulse
+git clone https://github.com/avengers2405/AstraInsights.git
+cd AstraInsights
 ```
 
 2. Install dependencies for both frontend and backend:
@@ -74,38 +74,40 @@ backend/
     config.js
     index.js
     package.json
-    secure-connect-engagement-db/
-        ca.crt
-        cert
-        cert.pfx
-        config.json
-        cqlshrc
-        identity.jks
-        key
-        trustStore.jks
-dataset.csv
+    package-lock.json
+    secure-connect-engagement-db.zip    
 frontend/
-    .env
-    .gitignore
-    .next/
-        app-build-manifest.json
-        ...
-    components.json
-    next-env.d.ts
-    next.config.mjs
-    package.json
-    postcss.config.mjs
     public/
-    README.md
+        next.svg
+        vercel.svg
     src/
         app/
-        ...
+            chat/
+                ChatInterface.css
+                page.tsx
+            home/
+                page.tsx
+            connect/
+                page.tsx
+        components/ui/
+            alert.tsx
+            button.tsx
+            dialog.tsx
+        lib/
+            utils.ts
+    .env
+    .gitignore
+    components.json
+    next.config.mjs
+    package-lock.json
+    package.json
+    postcss.config.mjs
+    README.md
     tailwind.config.ts
     tsconfig.json
-    vercel.json
+images/
+    ...
 README.md
-social_media_data.csv
-social_media_engagement_data.csv
 ```
 
 ## Environment Variables
@@ -115,9 +117,15 @@ social_media_engagement_data.csv
 Create a `.env` file in the `backend` directory and add the following environment variables:
 
 ```
-DB_HOST=your_database_host
-DB_USER=your_database_user
-DB_PASS=your_database_password
+ASTRA_DB_SECURE_BUNDLE_PATH='./secure-connect-engagement-db'
+ASTRA_DB_APPLICATION_TOKEN='your-astra-db-application-token'
+ASTRA_DB_ENDPOINT='your-astra-db-endpoint'
+LANGFLOW_APPLICATION_TOKEN='your-langflow-application-token'
+LANGFLOW_URL='your-langflow-url-endpoint'
+LANGFLOW_ID='your-langflow-id'
+LANGFLOW_FLOW_ID='your-langflow-flow-id'
+OPENAI_KEY='your-openai-key
+GROQ_KEY='your-groq-key'
 ```
 
 ### Frontend
@@ -128,19 +136,6 @@ Create a `.env` file in the `frontend` directory and add the following environme
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
-## Available Scripts
-
-### Backend
-
-- `npm run dev` or `yarn dev`: Runs the backend server in development mode.
-- `npm run start` or `yarn start`: Runs the backend server in production mode.
-
-### Frontend
-
-- `npm run dev` or `yarn dev`: Runs the frontend server in development mode.
-- `npm run build` or `yarn build`: Builds the frontend for production.
-- `npm run start` or `yarn start`: Runs the frontend server in production mode.
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -150,11 +145,9 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployed on Vercel and Render:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Checkout our deployed project at: [AstraInsights](https://social-pulse-git-master-akshits-projects-bfecfb3b.vercel.app/)
 
 ## Screenshots
 
@@ -162,16 +155,16 @@ Here are some screenshots of the application:
 
 ### AstraInsights
 
-![Project Thumbnail](https://github.com/avengers2405/SocialPulse/blob/master/images/Project%20Thumbnail.png)
+![Project Thumbnail](https://github.com/avengers2405/AstraInsights/blob/master/images/Project%20Thumbnail.png)
 
 ### UI
 
-![UI](https://github.com/avengers2405/SocialPulse/blob/master/images/landing.png)
+![UI](https://github.com/avengers2405/AstraInsights/blob/master/images/landing.png)
 
 ### Upload Custom Dataset
 
-![Upload](https://github.com/avengers2405/SocialPulse/blob/master/images/upload.png)
+![Upload](https://github.com/avengers2405/AstraInsights/blob/master/images/upload.png)
 
 ### Chat
 
-![Chat](https://github.com/avengers2405/SocialPulse/blob/master/images/in%20action.png)
+![Chat](https://github.com/avengers2405/AstraInsights/blob/master/images/in%20action.png)
