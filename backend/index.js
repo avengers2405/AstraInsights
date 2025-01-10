@@ -427,7 +427,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         console.log("* Documents found on DB already. Let\'s move on!\n Or maybe there's some error FFs");
       }
 
-      console.log(await admin1.listDatabases());
+      // console.log(await admin1.listDatabases());
     })();
 
     // const astra_client = new Collection({
