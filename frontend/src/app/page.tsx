@@ -455,7 +455,7 @@ const LandingPage = () => {
         {/* Footer */}
         <footer className="text-center text-purple-200">
           <p>Ready to start your analysis journey?</p>
-          <button className="mt-4 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full transition-colors">
+          <button onClick={() => setIsUploadDialogOpen(true)} className="mt-4 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full transition-colors">
             Begin Assignment
           </button>
         </footer>
