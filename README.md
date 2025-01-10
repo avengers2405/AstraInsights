@@ -155,3 +155,23 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Screenshots
+
+Here are some screenshots of the application:
+
+### Dashboard
+
+![Project Thumbnail](https://github.com/avengers2405/SocialPulse/blob/master/images/Project%20Thumbnail.png)
+
+### UI
+
+![UI](https://github.com/avengers2405/SocialPulse/blob/master/images/landing.png)
+
+### Upload Custom Dataset
+
+![Upload](https://github.com/avengers2405/SocialPulse/blob/master/images/upload.png)
+
+### Chat
+
+![Chat](https://github.com/avengers2405/SocialPulse/blob/master/images/in%20action.png)
