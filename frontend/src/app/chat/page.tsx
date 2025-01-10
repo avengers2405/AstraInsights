@@ -20,7 +20,6 @@ const ChatInterface = () => {
   const [inputText, setInputText] = useState('');
   const [chats, setChats] = useState([
     { id: 1, title: "New Chat", timestamp: "Today", active: true },
-    { id: 2, title: "Another Discussion", timestamp: "Yesterday", active: false },
   ]);
   const [querySent, setQuerySent] = useState(false);
 
@@ -200,7 +199,7 @@ const ChatInterface = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center gap-4 mt-4">
+          {/* <div className="flex justify-center gap-4 mt-4">
             <Button variant="outline" className="gap-2 rounded-xl">
               <Image size={16} />
               Create image
@@ -220,7 +219,7 @@ const ChatInterface = () => {
             <Button variant="outline" className="rounded-xl">
               <MoreHorizontal size={16} />
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ import { DataAPIClient, Collection } from '@datastax/astra-db-ts';
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 var collectionName = "engagement_data_collection";
-var dimension_embedding = 1536;
+var dimension_embedding = 1024;
 
 dotenv.config();
 const app = express();
@@ -35,6 +35,7 @@ const client = new cassandra.Client({
 });
 
 async function run() {
+  console.log('going to connect');
   await client.connect();
   console.log("Connected to Astra.");
 }
@@ -357,7 +358,7 @@ app.post("/query", async (req, res) => {
   console.log("response:  ", response);
   if (response==undefined){
     collectionName = 'engagement_data_collection';
-    dimension_embedding = 1536;
+    dimension_embedding = 1024;
     console.log('using backup data');
     response = await main(
       args[0], // inputValue
@@ -402,6 +403,12 @@ app.post("/upload", upload.single("file"), async (req, res) => {
           Likes: obj.Likes,
           Shares: obj.Shares,
           Comments: obj.Comments,
+          content: `${obj.PostType},${obj.Likes},${obj.Shares},${obj.Comments}`,
+          metadata: {
+            source: "internet",
+            title: "info",
+            language: 'english'
+          },
           $vectorize: `${obj.PostType},${obj.Likes},${obj.Shares},${obj.Comments}`,
         });
       }
