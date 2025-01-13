@@ -481,6 +481,18 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
+function wakeUp(){
+  try{
+      axios.get('http://google.com').then((response)=>{
+      console.log('pinged: ', response.status);
+    })
+  } catch(error){
+    console.log('error in ping: ', error);
+  }
+}
+
+setInterval(wakeUp, 1000*60*3);
+
 // Initialize server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
